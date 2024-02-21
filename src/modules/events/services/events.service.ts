@@ -47,7 +47,7 @@ export class EventsService implements IEventsService {
 
   private assemblerEventsFilters(filters: { date?: string; title?: string }) {
     const objectFilters: any = {};
-    if (filters.date) {
+    if (filters?.date) {
       objectFilters.startDate = LessThanOrEqual(filters.date);
       objectFilters.endDate = MoreThanOrEqual(filters.date);
     }
@@ -62,7 +62,9 @@ export class EventsService implements IEventsService {
     const perPage = Number(params.perPage) || 10;
     const options = calculatePagination(page, perPage);
 
-    const objectFilters = this.assemblerEventsFilters(params.filters);
+    const objectFilters = params?.filters
+      ? this.assemblerEventsFilters(params?.filters)
+      : {};
 
     const total = await this.eventRepository.count({
       where: objectFilters,
