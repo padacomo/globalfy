@@ -42,7 +42,8 @@ npm start
 
 ## ⚙️ Running tests
 
-![image](image-1.png)
+![image](https://github.com/padacomo/globalfy/assets/118579518/384547eb-3de7-430c-b549-653ca20186a0)
+
 
 ```
 npm run test
