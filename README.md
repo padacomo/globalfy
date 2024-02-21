@@ -14,19 +14,19 @@ Follow the instructions below to run the code.
 
 ### 🔧 Installation
 
-Install dependencies
+### Install dependencies
 
 ```
 npm install
 ```
 
-run docker compose
+### Run docker compose command
 
 ```
 docker-compose up -d
 ```
 
-run the project
+### Run the project
 
 ```
 npm start
@@ -42,8 +42,14 @@ npm start
 
 ## ⚙️ Running tests
 
+![image](image-1.png)
+
 ```
 npm run test
+```
+
+```
+npm run test:cov
 ```
 
 ## Any doubt I am available.

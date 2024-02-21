@@ -77,6 +77,20 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/",
+      "/out/",
+      "/src/main.ts",
+      "src/app.module.ts",
+      "src/app.pipes.ts",
+      "/src/infra/*",
+      "/src/commons/filters/index.ts",
+      "/src/modules/events/controllers/index.ts",
+      "/src/modules/events/dtos",
+      "/src/modules/events/events.module.ts",
+      "/src/modules/events/events.providers.ts"
+    ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }
