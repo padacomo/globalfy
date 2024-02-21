@@ -4,7 +4,13 @@ import { CreateEventsDto } from '../dtos';
 import { EventDto } from '../dtos/events.dto';
 import { UpdateEventsDto } from '../dtos/update-events.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import {
+  Between,
+  LessThanOrEqual,
+  MoreThanOrEqual,
+  Not,
+  Repository,
+} from 'typeorm';
 import { Events } from '../entities';
 import { DefaultError, ResourceNotFoundError } from '../../../commons/errors';
 import { ConflictEventDto } from '../dtos/conflic-events.dto';
@@ -55,6 +61,20 @@ export class EventsService implements IEventsService {
     return { ...filters, ...objectFilters };
   }
 
+  private async isConlictEvent(
+    id: string,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<boolean> {
+    const conflictingEvents = await this.eventRepository.find({
+      where: [
+        { id: Not(id), startDate: Between(startDate, endDate) },
+        { id: Not(id), endDate: Between(startDate, endDate) },
+      ],
+    });
+    return conflictingEvents.length > 0;
+  }
+
   async getEvents(
     params: IGetEventsRequest,
   ): Promise<PaginationResponseType<EventDto>> {
@@ -93,14 +113,27 @@ export class EventsService implements IEventsService {
     });
 
     if (event) {
-      return event;
+      const isConflicting = await this.isConlictEvent(
+        event.id,
+        event.startDate,
+        event.endDate,
+      );
+      return { ...event, isConflicting };
     }
 
     const newEvent = await this.eventRepository.save(data);
-    return newEvent;
+    const isConflicting = await this.isConlictEvent(
+      newEvent.id,
+      newEvent.startDate,
+      newEvent.endDate,
+    );
+    return { ...newEvent, isConflicting };
   }
 
-  async updateEvents(id: string, data: UpdateEventsDto): Promise<EventDto> {
+  async updateEvents(
+    id: string,
+    data: UpdateEventsDto,
+  ): Promise<ConflictEventDto> {
     const event = await this.checkEventExists(id);
 
     if (!data.startDate && data.endDate) {
@@ -108,7 +141,13 @@ export class EventsService implements IEventsService {
     }
 
     await this.eventRepository.update(id, data);
-    return this.findEventById(id);
+    const updatedEvent = await this.findEventById(id);
+    const isConflicting = await this.isConlictEvent(
+      updatedEvent.id,
+      updatedEvent.startDate,
+      updatedEvent.endDate,
+    );
+    return { ...updatedEvent, isConflicting };
   }
 
   async deleteEvents(id: string): Promise<void> {

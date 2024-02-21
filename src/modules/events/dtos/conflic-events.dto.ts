@@ -3,5 +3,5 @@ export class ConflictEventDto {
   title: string;
   startDate: Date;
   endDate: Date;
-  isConflict?: boolean;
+  isConflicting?: boolean;
 }

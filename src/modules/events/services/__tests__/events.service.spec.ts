@@ -21,6 +21,7 @@ describe('Event service', () => {
       title: 'Teste 3 2002 - Globalfy',
       startDate: '2024-03-29T00:00:00.000Z',
       endDate: '2024-03-30T00:00:00.000Z',
+      isConflicting: true,
     };
     const requestMock = {
       title: 'Teste 3 2002 - Globalfy',
@@ -29,12 +30,13 @@ describe('Event service', () => {
     } as unknown as CreateEventsDto;
 
     beforeEach(async () => {
+      mockRespository.find.mockResolvedValueOnce([serviceMockResult]);
       mockRespository.save.mockResolvedValueOnce(serviceMockResult);
       result = await eventsService.createEvents(requestMock);
     });
 
     it('returns the result of create event service', () => {
-      expect(result).toBe(serviceMockResult);
+      expect(result).toEqual(serviceMockResult);
     });
 
     it('calls create an event service with request data', () => {
@@ -43,23 +45,33 @@ describe('Event service', () => {
   });
 
   describe('when update an event', () => {
+    let result;
     const serviceMockResult = {
       id: 'abcd',
       title: 'Teste 3 2002 - Globalfy',
       startDate: '2024-03-29T00:00:00.000Z',
       endDate: '2024-03-30T00:00:00.000Z',
+      isConflicting: true,
     };
     const requestMock = {
       title: 'Teste 3 2002 - Globalfy',
     } as unknown as CreateEventsDto;
 
     beforeEach(async () => {
-      mockRespository.findOne.mockResolvedValueOnce(serviceMockResult);
+      mockRespository.findOne
+        .mockResolvedValueOnce(serviceMockResult)
+        .mockResolvedValueOnce(serviceMockResult);
+      mockRespository.find.mockResolvedValueOnce([serviceMockResult]);
       mockRespository.update.mockResolvedValue;
-      await eventsService.updateEvents('abcd', requestMock);
+
+      result = await eventsService.updateEvents('abcd', requestMock);
     });
 
-    it('returns the result of a updated event service', () => {
+    it('returns the result of update event service', () => {
+      expect(result).toEqual(serviceMockResult);
+    });
+
+    it('calls update an event service with request data', () => {
       expect(mockRespository.update).toHaveBeenCalledWith('abcd', requestMock);
     });
   });
