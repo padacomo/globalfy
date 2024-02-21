@@ -98,7 +98,6 @@ export class EventsController {
       id,
       updateEventsRequest,
     );
-    response.send(event);
     return successResponse(response, event);
   }
 
