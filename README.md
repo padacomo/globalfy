@@ -8,11 +8,9 @@ Follow the instructions below to run the code.
 
 ### 📋 requirements
 
-🛠️ Nest JS
-🛠️ docker-compose
-🛠️ Insomnia or Postman
+🛠️ Nest JS 🛠️ docker-compose 🛠️ Insomnia or Postman
 
-### 📌 ### As this is a POC, the .env file is not ignored. However, the project has an env.example
+### 📌 As this is a POC, the .env file is not ignored. However, the project has an env.example
 
 ### 🔧 Installation
 
@@ -36,7 +34,7 @@ npm start
 
 ### 📋 Project documentation
 
-- [Swagger](localhost:3000/doc)
+- [Swagger] in localhost:3000/doc
 
 - A collection for requests is available in the project [Insomnia_2024-02-21.json]
 
